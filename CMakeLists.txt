@@ -1,4 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
+
+include(${CMAKE_CURRENT_LIST_DIR}/rcore-port/common.cmake)
+
 if(POLICY CMP0025)
 	cmake_policy(SET CMP0025 NEW)
 endif()
