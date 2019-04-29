@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.0)
 
-SET(CMAKE_INSTALL_RPATH "/opt/musl-libc/lib")
-SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+SET(CMAKE_BUILD_RPATH ${MUSL}/lib)
+message(STATUS ${CMAKE_BUILD_RPATH})
+set(TOOLCHAIN ${MUSL}/bin)
 
 macro(global_set Name Value)
     #  message("set ${Name} to " ${ARGN})
@@ -65,5 +66,4 @@ global_set(CMAKE_OBJCOPY "${TOOLCHAIN}/objcopy${EXT}")
 global_set(CMAKE_SIZE "${TOOLCHAIN}/size${EXT}")
 global_set(CMAKE_OBJDUMP "${TOOLCHAIN}/objdump${EXT}")
 
-#global_set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fPIC -static -Os")
 include(${CMAKE_CURRENT_LIST_DIR}/compile-flags.cmake)
