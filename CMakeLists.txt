@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.1)
 
-include(${CMAKE_CURRENT_LIST_DIR}/rcore-port/common.cmake)
+SET(RCORE ON)
+add_definitions(-DRCORE)
+include(${CMAKE_CURRENT_LIST_DIR}/rcore-port/cmake/common.cmake)
 
 if(POLICY CMP0025)
 	cmake_policy(SET CMP0025 NEW)
@@ -200,7 +202,7 @@ list(APPEND UTIL_SRC ${CMAKE_CURRENT_BINARY_DIR}/version.c)
 source_group("Generated sources" FILES ${CMAKE_CURRENT_BINARY_DIR}/version.c)
 
 # Advanced settings
-if(NOT (CMAKE_C_COMPILER_ID STREQUAL "GNU" AND CMAKE_COMPILER_VERSION VERSION_LESS "4.5"))
+if(NOT DEFINED 3DS AND NOT (CMAKE_C_COMPILER_ID STREQUAL "GNU" AND CMAKE_COMPILER_VERSION VERSION_LESS "4.5"))
 	set(DEFAULT_LTO ON)
 else()
 	set(DEFAULT_LTO OFF)
@@ -280,7 +282,7 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_C_COMPILER_ID STREQUAL "Clang" OR
 	set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELEASE} -gdwarf")
 endif()
 
-if(BUILD_BBB OR BUILD_RASPI OR BUILD_PANDORA)
+if(BUILD_BBB OR BUILD_RASPI OR BUILD_PANDORA OR RCORE)
 	if(NOT BUILD_EGL)
 		add_definitions(-DCOLOR_16_BIT -DCOLOR_5_6_5)
 	endif()
@@ -302,7 +304,7 @@ if(PSP2 OR WII)
 	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-format")
 endif()
 
-if(DEFINED 3DS OR DEFINED PSP2 OR DEFINED WII OR DEFINED SWITCH)
+if(DEFINED 3DS OR DEFINED PSP2 OR DEFINED WII OR DEFINED SWITCH OR DEFINED RCORE)
 	set(IS_EMBEDDED ON)
 	set(USE_DEBUGGERS OFF)
 	set(USE_SQLITE3 OFF)
@@ -918,6 +920,8 @@ if(BUILD_GLES3)
 	add_definitions(-DBUILD_GLES3)
 endif()
 
+#to disable frontends, we just need libmgba.so
+SET(DISABLE_FRONTENDS OFF)
 if(DISABLE_FRONTENDS)
 	set(BUILD_SDL OFF)
 	set(BUILD_QT OFF)
@@ -955,13 +959,13 @@ if(BUILD_OPENEMU)
 	install(TARGETS ${BINARY_NAME}-openemu LIBRARY DESTINATION ${OE_LIBDIR} COMPONENT ${BINARY_NAME}.oecoreplugin NAMELINK_SKIP)
 endif()
 
-if(BUILD_SDL)
-	add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/platform/sdl ${CMAKE_CURRENT_BINARY_DIR}/sdl)
-endif()
+#if(BUILD_SDL)
+	#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/platform/sdl ${CMAKE_CURRENT_BINARY_DIR}/sdl)
+#endif()
 
-if(BUILD_QT)
-	add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/platform/qt ${CMAKE_CURRENT_BINARY_DIR}/qt)
-endif()
+#if(BUILD_QT)
+	#add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/src/platform/qt ${CMAKE_CURRENT_BINARY_DIR}/qt)
+#endif()
 
 if(BUILD_PERF)
 	set(PERF_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src/platform/test/perf-main.c)

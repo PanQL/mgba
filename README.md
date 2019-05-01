@@ -1,5 +1,4 @@
 ## mgba for rcore  
-----
 ### get libmgba.so  
 ```bash
 # under mgba/
