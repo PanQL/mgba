@@ -28,13 +28,6 @@ include(${CMAKE_CURRENT_LIST_DIR}/cmake/common.cmake)
 project(mgba C)
 add_source_files(src/*.c)
 
-#if ( EXISTS ${CMAKE_CURRENT_LIST_DIR}/../build/libmgba.a ) 
-	#add_library(libmgba STATIC IMPORTED GLOBAL)
-	#set_property(TARGET libmgba PROPERTY IMPORTED_LOCATION ${CMAKE_CURRENT_LIST_DIR}/../build/libmgba.a)
-#else()
-	#message(STATUS "error! libmgba not exits")
-#endif()
-
 removeDuplicateSubstring(${CMAKE_C_FLAGS} CMAKE_C_FLAGS)
 removeDuplicateSubstring(${CMAKE_CXX_FLAGS} CMAKE_CXX_FLAGS)
 
@@ -45,8 +38,8 @@ target_include_directories(
 	PUBLIC 
 	"$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>"
 )
-#set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE C)
+set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE C)
 
-#target_link_libraries(${PROJECT_NAME}
-        #${CMAKE_CURRENT_LIST_DIR}/../build/libmgba.a
-#)
+target_link_libraries(${PROJECT_NAME}
+		${CMAKE_CURRENT_LIST_DIR}/../build/libmgba.a
+)

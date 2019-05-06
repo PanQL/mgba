@@ -40,9 +40,3 @@ macro(add_compile_flags WHERE)
 endmacro()
 
 include(${CMAKE_CURRENT_LIST_DIR}/compile-flags.cmake)
-
-global_set(CMAKE_C_LINK_EXECUTABLE
-        "<CMAKE_C_COMPILER>  <FLAGS> <CMAKE_C_LINK_FLAGS> <LINK_FLAGS> \"${CRTI_OBJ}\" \"${CRTBEGIN_OBJ}\" <OBJECTS> \"${CRTEND_OBJ}\" \"${CRTN_OBJ}\" -o <TARGET> <LINK_LIBRARIES>")
-
-global_set(CMAKE_CXX_LINK_EXECUTABLE
-        "<CMAKE_CXX_COMPILER>  <FLAGS> <CMAKE_CXX_LINK_FLAGS> <LINK_FLAGS> \"${CRTI_OBJ}\" \"${CRTBEGIN_OBJ}\" <OBJECTS> \"${CRTEND_OBJ}\" \"${CRTN_OBJ}\" -o <TARGET> <LINK_LIBRARIES>")
