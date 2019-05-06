@@ -7,3 +7,7 @@
 #include <mgba-util/string.h>
 #include <mgba-util/vfs.h>
 #include <mgba/internal/gba/gba.h>
+
+int main(){
+	return 0;
+}

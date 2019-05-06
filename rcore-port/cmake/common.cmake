@@ -1,9 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
 
-SET(CMAKE_BUILD_RPATH ${MUSL}/lib)
-message(STATUS ${CMAKE_BUILD_RPATH})
-set(TOOLCHAIN ${MUSL}/bin)
-
 macro(global_set Name Value)
     #  message("set ${Name} to " ${ARGN})
     set(${Name} "${Value}" CACHE STRING "NoDesc" FORCE)
@@ -43,27 +39,10 @@ macro(add_compile_flags WHERE)
     endif ()
 endmacro()
 
-if(NOT TOOLCHAIN)   # 如果没有设定工具链
-    #find_path(_TOOLCHAIN riscv64-unknown-elf-gcc${EXT}) # 寻找riscv64工具链，将其引入为我们使用的工具链
-    global_set(TOOLCHAIN "/usr/bin")
-elseif(NOT "${TOOLCHAIN}" MATCHES "/$") # TOKNOW
-	global_set(TOOLCHAIN "${TOOLCHAIN}")
-endif()
-
-if (NOT TOOLCHAIN)  # 检测工具链是否被正确设置，没有则报错
-    message(FATAL_ERROR "TOOLCHAIN must be set, to absolute path of kendryte-toolchain dist/bin folder.")
-endif ()
-
-message(STATUS "Using ${TOOLCHAIN} as toolchain")
-
-set(EXT,"")
-
-global_set(CMAKE_C_COMPILER "${TOOLCHAIN}/gcc${EXT}")
-global_set(CMAKE_CXX_COMPILER "${TOOLCHAIN}/g++${EXT}")
-global_set(CMAKE_LINKER "${TOOLCHAIN}/ld${EXT}")
-global_set(CMAKE_AR "${TOOLCHAIN}/ar${EXT}")
-global_set(CMAKE_OBJCOPY "${TOOLCHAIN}/objcopy${EXT}")
-global_set(CMAKE_SIZE "${TOOLCHAIN}/size${EXT}")
-global_set(CMAKE_OBJDUMP "${TOOLCHAIN}/objdump${EXT}")
-
 include(${CMAKE_CURRENT_LIST_DIR}/compile-flags.cmake)
+
+global_set(CMAKE_C_LINK_EXECUTABLE
+        "<CMAKE_C_COMPILER>  <FLAGS> <CMAKE_C_LINK_FLAGS> <LINK_FLAGS> \"${CRTI_OBJ}\" \"${CRTBEGIN_OBJ}\" <OBJECTS> \"${CRTEND_OBJ}\" \"${CRTN_OBJ}\" -o <TARGET> <LINK_LIBRARIES>")
+
+global_set(CMAKE_CXX_LINK_EXECUTABLE
+        "<CMAKE_CXX_COMPILER>  <FLAGS> <CMAKE_CXX_LINK_FLAGS> <LINK_FLAGS> \"${CRTI_OBJ}\" \"${CRTBEGIN_OBJ}\" <OBJECTS> \"${CRTEND_OBJ}\" \"${CRTN_OBJ}\" -o <TARGET> <LINK_LIBRARIES>")
