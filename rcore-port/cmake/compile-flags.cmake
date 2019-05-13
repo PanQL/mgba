@@ -1,5 +1,4 @@
 add_compile_flags(LD
-		-nostartfiles
 		-static
 		-Wl,--gc-sections
 		-Wl,-static
