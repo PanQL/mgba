@@ -158,16 +158,16 @@ void test(unsigned int* srcPtr) {
 			r = (srcPtr[i * 120 + j] >> 27);
 			g = (srcPtr[i * 120 + j] >> 21) & 0x3f;
 			b = (srcPtr[i * 120 + j] >> 16) & 0x1f;
-			fb[i * 768 * 3 + j * 6] = b;
-			fb[i * 768 * 3 + j * 6 + 1] = g;
-			fb[i * 768 * 3 + j * 6 + 2] = r;
+			fb[2 * j * 768 * 3 + i * 3] = b;
+			fb[2 * j * 768 * 3 + i * 3 + 1] = g;
+			fb[2 * j * 768 * 3 + i * 3 + 2] = r;
 
 			r = (srcPtr[i * 120 + j] >> 11) & 0x1f;
 			g = (srcPtr[i * 120 + j] >> 5) & 0x3f;
 			b = (srcPtr[i * 120 + j]) & 0x1f;
-			fb[i * 768 * 3 + j * 6 + 3] = b;
-			fb[i * 768 * 3 + j * 6 + 4] = g;
-			fb[i * 768 * 3 + j * 6 + 5] = r;
+			fb[2 * j * 768 * 3 + i * 3 + 3] = b;
+			fb[2 * j * 768 * 3 + i * 3 + 4] = g;
+			fb[2 * j * 768 * 3 + i * 3 + 5] = r;
 		}
 	}
 }
@@ -178,6 +178,7 @@ void mgbaMainLoop(FILE* fd) {
 		.volume = 0x040,
 	};
 
+	struct VFile* romFile = VFileOpen("boot.gba", O_RDONLY);
 	struct mCore* core = GBACoreCreate();
 	core->init(core);
 	core->setVideoBuffer(core, (color_t*) videoBuffer, 240);
@@ -188,19 +189,20 @@ void mgbaMainLoop(FILE* fd) {
 	mCoreConfigLoadDefaults(&core->config, &opts);
 	mCoreLoadConfig(core);
 
+	core->loadROM(core, romFile);
 	core->reset(core);
 
 	int framecount = 0;
 	while (1) {
 		core->runFrame(core);
 		framecount++;
-		if (framecount % 100 == 0) {
+		/*if (framecount % 10 == 0) {*/
 			// TODO
 			test(videoBuffer);
 			if (fwrite((void*) frameBuffer, 1024 * 768 * 3, 1, fd) < 0) {
 				printf("mgba ERROR!!!");
 			}
-		}
+		/*}*/
 	}
 }
 
