@@ -150,12 +150,63 @@ void blitFromGbaToLcd1024x768Upscaled(uint64_t* srcPtr) {
 	}
 }
 
+// static const int keyMap[10] = {
+// 	PSB_CIRCLE, // GBA_KEY_A = 0,
+// 	PSB_CROSS, // GBA_KEY_B = 1,
+// 	PSB_SELECT, // GBA_KEY_SELECT = 2,
+// 	PSB_START, // GBA_KEY_START = 3,
+// 	PSB_PAD_RIGHT, // GBA_KEY_RIGHT = 4,
+// 	PSB_PAD_LEFT, // GBA_KEY_LEFT = 5,
+// 	PSB_PAD_UP, // GBA_KEY_UP = 6,
+// 	PSB_PAD_DOWN, // GBA_KEY_DOWN = 7,
+// 	PSB_R1, // GBA_KEY_R = 8,
+// 	PSB_L1, // GBA_KEY_L = 9,
+// };
+/*
+void test(unsigned int* srcPtr) {
+    char r, g, b;
+    char* fb = frameBuffer;
+    const int height = 160;
+    const int width = 240;
+    const int offset = ((1024 - 960) / 2 * 768 + (768 - 640) / 2) * 3;
+    const int k = 4;
+    for (int i = 0; i < height; ++i) {
+        for (int j = 0; j < width / 2; ++j) {
+            r = (srcPtr[i * width / 2 + j] >> 24) & 0xf8;
+            g = (srcPtr[i * width / 2 + j] >> 19) & 0xfc;
+            b = (srcPtr[i * width / 2 + j] >> 13) & 0xf8;
+            for (int m = 0; m < k; ++m) {
+                for (int n = 0; n < k; ++n) {
+                    fb[(2 * (j * k + m) + 1) * 768 * 3 + (i * k + n) * 3 + offset] = r;
+                    fb[(2 * (j * k + m) + 1) * 768 * 3 + (i * k + n) * 3 + 1 + offset] = g;
+                    fb[(2 * (j * k + m) + 1) * 768 * 3 + (i * k + n) * 3 + 2 + offset] = b;
+                }
+            }
+
+            r = (srcPtr[i * width / 2 + j] >> 8) & 0xf8;
+            g = (srcPtr[i * width / 2 + j] >> 3) & 0xfc;
+            b = (srcPtr[i * width / 2 + j] << 3) & 0xf8;
+            for (int m = 0; m < k; ++m) {
+                for (int n = 0; n < k; ++n) {
+                    fb[(2 * (j * k + m)) * 768 * 3 + (i * k + n) * 3 + offset] = r;
+                    fb[(2 * (j * k + m)) * 768 * 3 + (i * k + n) * 3 + 1 + offset] = g;
+                    fb[(2 * (j * k + m)) * 768 * 3 + (i * k + n) * 3 + 2 + offset] = b;
+                }
+            }
+            // fb[2 * j * 768 * 3 + i * 3 + offset] = r;
+            // fb[2 * j * 768 * 3 + i * 3 + 1 + offset] = g;
+            // fb[2 * j * 768 * 3 + i * 3 + 2 + offset] = b;
+        }
+    }
+}*/
+
 void test(unsigned int* srcPtr) {
 	char r, g, b;
 	char* fb = frameBuffer;
 	const int height = 160;
 	const int width = 240;
-	const int offset = ((1024 - 960) / 2 * 768 + (768 - 640) / 2) * 3;
+	// const int offset = ((1024 - 960) / 2 * 768 + (768 - 640) / 2) * 3;
+	const int offset = ((768 - 640) / 2 * 1024 + (1024 - 960) / 2) * 3;
 	const int k = 4;
 	for (int i = 0; i < height; ++i) {
 		for (int j = 0; j < width / 2; ++j) {
@@ -164,9 +215,9 @@ void test(unsigned int* srcPtr) {
 			b = (srcPtr[i * width / 2 + j] >> 13) & 0xf8;
 			for (int m = 0; m < k; ++m) {
 				for (int n = 0; n < k; ++n) {
-					fb[(2 * (j * k + m) + 1) * 768 * 3 + (i * k + n) * 3 + offset] = r;
-					fb[(2 * (j * k + m) + 1) * 768 * 3 + (i * k + n) * 3 + 1 + offset] = g;
-					fb[(2 * (j * k + m) + 1) * 768 * 3 + (i * k + n) * 3 + 2 + offset] = b;
+					fb[(2 * (j * k + m) + 1) * 3 + (i * k + n) * 3 * 1024 + offset] = b;
+					fb[(2 * (j * k + m) + 1) * 3 + (i * k + n) * 3 * 1024 + 1 + offset] = g;
+					fb[(2 * (j * k + m) + 1) * 3 + (i * k + n) * 3 * 1024 + 2 + offset] = r;
 				}
 			}
 
@@ -175,33 +226,15 @@ void test(unsigned int* srcPtr) {
 			b = (srcPtr[i * width / 2 + j] << 3) & 0xf8;
 			for (int m = 0; m < k; ++m) {
 				for (int n = 0; n < k; ++n) {
-					fb[(2 * (j * k + m)) * 768 * 3 + (i * k + n) * 3 + offset] = r;
-					fb[(2 * (j * k + m)) * 768 * 3 + (i * k + n) * 3 + 1 + offset] = g;
-					fb[(2 * (j * k + m)) * 768 * 3 + (i * k + n) * 3 + 2 + offset] = b;
+					fb[(2 * (j * k + m)) * 3 + (i * k + n) * 3 * 1024 + offset] = b;
+					fb[(2 * (j * k + m)) * 3 + (i * k + n) * 3 * 1024 + 1 + offset] = g;
+					fb[(2 * (j * k + m)) * 3 + (i * k + n) * 3 * 1024 + 2 + offset] = r;
 				}
 			}
-			// fb[2 * j * 768 * 3 + i * 3 + offset] = r;
-			// fb[2 * j * 768 * 3 + i * 3 + 1 + offset] = g;
-			// fb[2 * j * 768 * 3 + i * 3 + 2 + offset] = b;
 		}
 	}
 }
-/*
-void test(char* srcPtr) {
-    char r, g, b;
-    char* fb = frameBuffer;
-    for (int i = 0; i < 160; ++i) {
-        for (int j = 0; j < 240; ++j) {
-            r = (srcPtr[i * 240 * 2 + j * 2] & 0xf8);
-            g = ((srcPtr[i * 240 * 2 + j * 2] << 5) & 0xe0) | ((srcPtr[i * 240 * 2 + j * 2 + 1] >> 3) & 0x1c);
-            b = (srcPtr[i * 240 * 2 + j * 2 + 1] << 3) & 0xf8;
-            fb[j * 768 * 3 + i * 3] = r;
-            fb[j * 768 * 3 + i * 3 + 1] = g;
-            fb[j * 768 * 3 + i * 3 + 2] = b;
-        }
-    }
-}
-*/
+
 void mgbaMainLoop(FILE* fd) {
 	struct mCoreOptions opts = {
 		.useBios = false,
@@ -228,7 +261,7 @@ void mgbaMainLoop(FILE* fd) {
 		framecount++;
 		/*if (framecount % 10 == 0) {*/
 		// TODO
-		test(videoBuffer);
+		test((unsigned int*) videoBuffer);
 		if (fwrite((void*) frameBuffer, 1024 * 768 * 3, 1, fd) < 0) {
 			printf("mgba ERROR!!!");
 		}
