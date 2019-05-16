@@ -215,9 +215,9 @@ void test(unsigned int* srcPtr) {
 			b = (srcPtr[i * width / 2 + j] >> 13) & 0xf8;
 			for (int m = 0; m < k; ++m) {
 				for (int n = 0; n < k; ++n) {
-					fb[(2 * (j * k + m) + 1) * 3 + (i * k + n) * 3 * 1024 + offset] = b;
-					fb[(2 * (j * k + m) + 1) * 3 + (i * k + n) * 3 * 1024 + 1 + offset] = g;
-					fb[(2 * (j * k + m) + 1) * 3 + (i * k + n) * 3 * 1024 + 2 + offset] = r;
+					fb[((2 * j + 1) * k + m) * 3 + (i * k + n) * 3 * 1024 + offset] = b;
+					fb[((2 * j + 1) * k + m) * 3 + (i * k + n) * 3 * 1024 + 1 + offset] = g;
+					fb[((2 * j + 1) * k + m) * 3 + (i * k + n) * 3 * 1024 + 2 + offset] = r;
 				}
 			}
 
@@ -226,9 +226,9 @@ void test(unsigned int* srcPtr) {
 			b = (srcPtr[i * width / 2 + j] << 3) & 0xf8;
 			for (int m = 0; m < k; ++m) {
 				for (int n = 0; n < k; ++n) {
-					fb[(2 * (j * k + m)) * 3 + (i * k + n) * 3 * 1024 + offset] = b;
-					fb[(2 * (j * k + m)) * 3 + (i * k + n) * 3 * 1024 + 1 + offset] = g;
-					fb[(2 * (j * k + m)) * 3 + (i * k + n) * 3 * 1024 + 2 + offset] = r;
+					fb[(2 * j * k + m) * 3 + (i * k + n) * 3 * 1024 + offset] = b;
+					fb[(2 * j * k + m) * 3 + (i * k + n) * 3 * 1024 + 1 + offset] = g;
+					fb[(2 * j * k + m) * 3 + (i * k + n) * 3 * 1024 + 2 + offset] = r;
 				}
 			}
 		}
