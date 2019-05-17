@@ -110,7 +110,7 @@ void test1(unsigned short* srcPtr, FILE* file) {
 						fb[(j * k + m) * 3 + (i * k + n) * 3 * 1024 + 1 + offset] = g;
 						fb[(j * k + m) * 3 + (i * k + n) * 3 * 1024 + 2 + offset] = r;
 					}
-					fseek(file, (i * k + n) * 3 * 1024 + offset, SEEK_SET);
+					fseek(file, (i * k + n) * 3 * 1024 + j * k * 3 + offset, SEEK_SET);
 					fwrite((void*) frameBuffer, 4 * 3, 1, file);
 				}
 			}
