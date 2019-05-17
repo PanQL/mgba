@@ -13,6 +13,7 @@
 #include <string.h>
 
 char* videoBuffer = NULL;
+char* frameBuffer = NULL;
 
 int plotMandelbrot(FILE* fd) {
 	float scale = 5e-3;
@@ -86,121 +87,7 @@ int plotMandelbrot(FILE* fd) {
 	return 0;
 }
 
-const int dstPtrLen = 1024 * 768 * 3;
-char* frameBuffer;
-void blitFromGbaToLcd1024x768Upscaled(uint64_t* srcPtr) {
-	const unsigned int upscaledWidth = 240 * 4; // 960
-	const unsigned int upscaledHeight = 160 * 4; // 640
-	const unsigned int offX = (1024 - upscaledWidth) / 2;
-	const unsigned int offY = (768 - upscaledHeight) / 2;
-	int fbStart = offY * 1024 * 3;
-	int fbEnd = (768 - offY) * 1024 * 3;
-
-	for (int i = 0; i < fbStart; ++i) // filed y black
-		frameBuffer[i] = 0;
-	for (int i = fbEnd; i < dstPtrLen; ++i) // filed y black
-		frameBuffer[i] = 0;
-
-	char r = 0, g = 0, b = 0;
-	unsigned int pix[4];
-	const int lineLen = 1024 * 3;
-
-	for (int i = 0; i < 160; ++i) {
-		char linePixs[lineLen];
-		int linePixPos = 0;
-
-		for (; linePixPos < 3 * offX; ++linePixPos) { // filed x black
-			linePixs[linePixPos] = 0;
-		}
-		for (int j = 0; j < 240 / 4; ++j) {
-			pix[0] = (*srcPtr >> 48);
-			pix[1] = (*srcPtr >> 32) & (0xff);
-			pix[2] = (*srcPtr >> 16) & (0xff);
-			pix[3] = *srcPtr & (0xff);
-			++srcPtr;
-
-			for (int k = 0; k < 4; ++k) { // rgb565
-				r = pix[k] >> 11;
-				g = (pix[k] >> 5) & 0x3f;
-				b = pix[k] & 0x1f;
-				linePixs[linePixPos++] = b;
-				linePixs[linePixPos++] = g;
-				linePixs[linePixPos++] = r;
-
-				linePixs[linePixPos++] = b;
-				linePixs[linePixPos++] = g;
-				linePixs[linePixPos++] = r;
-
-				linePixs[linePixPos++] = b;
-				linePixs[linePixPos++] = g;
-				linePixs[linePixPos++] = r;
-
-				linePixs[linePixPos++] = b;
-				linePixs[linePixPos++] = g;
-				linePixs[linePixPos++] = r;
-			}
-		}
-		for (; linePixPos < lineLen; ++linePixPos) { // filed x black
-			linePixs[linePixPos] = 0;
-		}
-		for (int j = 0; j < 4; ++j) {
-			memcpy(frameBuffer, linePixs, lineLen);
-			frameBuffer += lineLen;
-		}
-	}
-}
-
-// static const int keyMap[10] = {
-// 	PSB_CIRCLE, // GBA_KEY_A = 0,
-// 	PSB_CROSS, // GBA_KEY_B = 1,
-// 	PSB_SELECT, // GBA_KEY_SELECT = 2,
-// 	PSB_START, // GBA_KEY_START = 3,
-// 	PSB_PAD_RIGHT, // GBA_KEY_RIGHT = 4,
-// 	PSB_PAD_LEFT, // GBA_KEY_LEFT = 5,
-// 	PSB_PAD_UP, // GBA_KEY_UP = 6,
-// 	PSB_PAD_DOWN, // GBA_KEY_DOWN = 7,
-// 	PSB_R1, // GBA_KEY_R = 8,
-// 	PSB_L1, // GBA_KEY_L = 9,
-// };
-/*
-void test(unsigned int* srcPtr) {
-    char r, g, b;
-    char* fb = frameBuffer;
-    const int height = 160;
-    const int width = 240;
-    const int offset = ((1024 - 960) / 2 * 768 + (768 - 640) / 2) * 3;
-    const int k = 4;
-    for (int i = 0; i < height; ++i) {
-        for (int j = 0; j < width / 2; ++j) {
-            r = (srcPtr[i * width / 2 + j] >> 24) & 0xf8;
-            g = (srcPtr[i * width / 2 + j] >> 19) & 0xfc;
-            b = (srcPtr[i * width / 2 + j] >> 13) & 0xf8;
-            for (int m = 0; m < k; ++m) {
-                for (int n = 0; n < k; ++n) {
-                    fb[(2 * (j * k + m) + 1) * 768 * 3 + (i * k + n) * 3 + offset] = r;
-                    fb[(2 * (j * k + m) + 1) * 768 * 3 + (i * k + n) * 3 + 1 + offset] = g;
-                    fb[(2 * (j * k + m) + 1) * 768 * 3 + (i * k + n) * 3 + 2 + offset] = b;
-                }
-            }
-
-            r = (srcPtr[i * width / 2 + j] >> 8) & 0xf8;
-            g = (srcPtr[i * width / 2 + j] >> 3) & 0xfc;
-            b = (srcPtr[i * width / 2 + j] << 3) & 0xf8;
-            for (int m = 0; m < k; ++m) {
-                for (int n = 0; n < k; ++n) {
-                    fb[(2 * (j * k + m)) * 768 * 3 + (i * k + n) * 3 + offset] = r;
-                    fb[(2 * (j * k + m)) * 768 * 3 + (i * k + n) * 3 + 1 + offset] = g;
-                    fb[(2 * (j * k + m)) * 768 * 3 + (i * k + n) * 3 + 2 + offset] = b;
-                }
-            }
-            // fb[2 * j * 768 * 3 + i * 3 + offset] = r;
-            // fb[2 * j * 768 * 3 + i * 3 + 1 + offset] = g;
-            // fb[2 * j * 768 * 3 + i * 3 + 2 + offset] = b;
-        }
-    }
-}*/
-
-void test(unsigned int* srcPtr) {
+void test1(unsigned short* srcPtr) {
 	char r, g, b;
 	char* fb = frameBuffer;
 	const int height = 160;
@@ -209,29 +96,64 @@ void test(unsigned int* srcPtr) {
 	const int offset = ((768 - 640) / 2 * 1024 + (1024 - 960) / 2) * 3;
 	const int k = 4;
 	for (int i = 0; i < height; ++i) {
-		for (int j = 0; j < width / 2; ++j) {
-			r = (srcPtr[i * width / 2 + j] >> 24) & 0xf8;
-			g = (srcPtr[i * width / 2 + j] >> 19) & 0xfc;
-			b = (srcPtr[i * width / 2 + j] >> 13) & 0xf8;
-			for (int m = 0; m < k; ++m) {
+		for (int j = 0; j < width; ++j) {
+			r = (srcPtr[i * width + j] >> 8) & 0xf8;
+			g = (srcPtr[i * width + j] >> 3) & 0xfc;
+			b = (srcPtr[i * width + j] << 3) & 0xf8;
+			if (fb[j * k * 3 + i * k * 3 * 1024 + offset] == b && fb[j * k * 3 + i * k * 3 * 1024 + 1 + offset] == g &&
+			    fb[j * k * 3 + i * k * 3 * 1024 + 2 + offset] == r) {
+				continue;
+			} else {
 				for (int n = 0; n < k; ++n) {
-					fb[((2 * j + 1) * k + m) * 3 + (i * k + n) * 3 * 1024 + offset] = b;
-					fb[((2 * j + 1) * k + m) * 3 + (i * k + n) * 3 * 1024 + 1 + offset] = g;
-					fb[((2 * j + 1) * k + m) * 3 + (i * k + n) * 3 * 1024 + 2 + offset] = r;
-				}
-			}
-
-			r = (srcPtr[i * width / 2 + j] >> 8) & 0xf8;
-			g = (srcPtr[i * width / 2 + j] >> 3) & 0xfc;
-			b = (srcPtr[i * width / 2 + j] << 3) & 0xf8;
-			for (int m = 0; m < k; ++m) {
-				for (int n = 0; n < k; ++n) {
-					fb[(2 * j * k + m) * 3 + (i * k + n) * 3 * 1024 + offset] = b;
-					fb[(2 * j * k + m) * 3 + (i * k + n) * 3 * 1024 + 1 + offset] = g;
-					fb[(2 * j * k + m) * 3 + (i * k + n) * 3 * 1024 + 2 + offset] = r;
+					for (int m = 0; m < k; ++m) {
+						fb[(j * k + m) * 3 + (i * k + n) * 3 * 1024 + offset] = b;
+						fb[(j * k + m) * 3 + (i * k + n) * 3 * 1024 + 1 + offset] = g;
+						fb[(j * k + m) * 3 + (i * k + n) * 3 * 1024 + 2 + offset] = r;
+					}
 				}
 			}
 		}
+	}
+}
+
+void test(unsigned short* srcPtr) {
+	char r, g, b;
+	char* fb = frameBuffer;
+	const int height = 160;
+	const int width = 240;
+	// const int offset = ((1024 - 960) / 2 * 768 + (768 - 640) / 2) * 3;
+	const int offset = ((768 - 640) / 2 * 1024 + (1024 - 960) / 2) * 3;
+	const int k = 4;
+	for (int i = 0; i < height; ++i) {
+		for (int j = 0; j < width; ++j) {
+			r = (srcPtr[i * width + j] >> 8) & 0xf8;
+			g = (srcPtr[i * width + j] >> 3) & 0xfc;
+			b = (srcPtr[i * width + j] << 3) & 0xf8;
+			for (int m = 0; m < k; ++m) {
+				for (int n = 0; n < k; ++n) {
+					fb[(j * k + m) * 3 + (i * k + n) * 3 * 1024 + offset] = b;
+					fb[(j * k + m) * 3 + (i * k + n) * 3 * 1024 + 1 + offset] = g;
+					fb[(j * k + m) * 3 + (i * k + n) * 3 * 1024 + 2 + offset] = r;
+				}
+			}
+		}
+	}
+}
+
+static int _logLevel = 0x0f;
+void _log(struct mLogger* log, int category, enum mLogLevel level, const char* format, va_list args) {
+	if (level & _logLevel) {
+		// Categories are registered at runtime, but the name can be found
+		// through a simple lookup.
+		printf("%s: ", mLogCategoryName(category));
+
+		// We get a format string and a varargs context from the core, so we
+		// need to use the v* version of printk.
+		vprintf(format, args);
+
+		// The format strings do NOT include a newline, so we need to
+		// append it ourself.
+		printf("\r\n");
 	}
 }
 
@@ -240,7 +162,8 @@ void mgbaMainLoop(FILE* fd) {
 		.useBios = false,
 		.volume = 0x040,
 	};
-
+	static struct mLogger logger = { .log = _log };
+	mLogSetDefaultLogger(&logger);
 	struct VFile* romFile = VFileOpen("boot.gba", O_RDONLY);
 	struct mCore* core = GBACoreCreate();
 	core->init(core);
@@ -258,14 +181,14 @@ void mgbaMainLoop(FILE* fd) {
 	int framecount = 0;
 	while (1) {
 		core->runFrame(core);
-		framecount++;
-		/*if (framecount % 10 == 0) {*/
-		// TODO
-		test((unsigned int*) videoBuffer);
+		//++framecount;
+		// if (framecount == 3) {
+		// framecount = 0;
+		test((unsigned short*) videoBuffer);
 		if (fwrite((void*) frameBuffer, 1024 * 768 * 3, 1, fd) < 0) {
 			printf("mgba ERROR!!!");
 		}
-		/*}*/
+		//}
 	}
 }
 
