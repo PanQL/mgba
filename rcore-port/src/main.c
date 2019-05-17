@@ -87,7 +87,7 @@ int plotMandelbrot(FILE* fd) {
 	return 0;
 }
 
-void test1(unsigned short* srcPtr) {
+void test1(unsigned short* srcPtr, FILE* file) {
 	char r, g, b;
 	char* fb = frameBuffer;
 	const int height = 160;
@@ -110,6 +110,8 @@ void test1(unsigned short* srcPtr) {
 						fb[(j * k + m) * 3 + (i * k + n) * 3 * 1024 + 1 + offset] = g;
 						fb[(j * k + m) * 3 + (i * k + n) * 3 * 1024 + 2 + offset] = r;
 					}
+					fseek(file, (i * k + n) * 3 * 1024 + offset, SEEK_SET);
+					fwrite((void*) frameBuffer, 4 * 3, 1, file);
 				}
 			}
 		}
