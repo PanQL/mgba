@@ -11,9 +11,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/mman.h>
+#include <sys/types.h>    
+#include <sys/stat.h>    
+#include <fcntl.h>
 
 char* videoBuffer = NULL;
 char* frameBuffer = NULL;
+char* Buffer = NULL;
 
 int plotMandelbrot(FILE* fd) {
 	float scale = 5e-3;
@@ -87,12 +92,11 @@ int plotMandelbrot(FILE* fd) {
 	return 0;
 }
 
-void test1(unsigned short* srcPtr, FILE* file) {
+void test1(unsigned short* srcPtr) {
 	char r, g, b;
-	char* fb = frameBuffer;
+	char* fb = Buffer;
 	const int height = 160;
 	const int width = 240;
-	// const int offset = ((1024 - 960) / 2 * 768 + (768 - 640) / 2) * 3;
 	const int offset = ((768 - 640) / 2 * 1024 + (1024 - 960) / 2) * 3;
 	const int k = 4;
 	for (int i = 0; i < height; ++i) {
@@ -100,7 +104,8 @@ void test1(unsigned short* srcPtr, FILE* file) {
 			r = (srcPtr[i * width + j] >> 8) & 0xf8;
 			g = (srcPtr[i * width + j] >> 3) & 0xfc;
 			b = (srcPtr[i * width + j] << 3) & 0xf8;
-			if (fb[j * k * 3 + i * k * 3 * 1024 + offset] == b && fb[j * k * 3 + i * k * 3 * 1024 + 1 + offset] == g &&
+			if (fb[j * k * 3 + i * k * 3 * 1024 + offset] == b && 
+				fb[j * k * 3 + i * k * 3 * 1024 + 1 + offset] == g &&
 			    fb[j * k * 3 + i * k * 3 * 1024 + 2 + offset] == r) {
 				continue;
 			} else {
@@ -109,33 +114,10 @@ void test1(unsigned short* srcPtr, FILE* file) {
 						fb[(j * k + m) * 3 + (i * k + n) * 3 * 1024 + offset] = b;
 						fb[(j * k + m) * 3 + (i * k + n) * 3 * 1024 + 1 + offset] = g;
 						fb[(j * k + m) * 3 + (i * k + n) * 3 * 1024 + 2 + offset] = r;
+						frameBuffer[(j * k + m) * 3 + (i * k + n) * 3 * 1024 + offset] = b;
+						frameBuffer[(j * k + m) * 3 + (i * k + n) * 3 * 1024 + 1 + offset] = g;
+						frameBuffer[(j * k + m) * 3 + (i * k + n) * 3 * 1024 + 2 + offset] = r;
 					}
-					fseek(file, (i * k + n) * 3 * 1024 + j * k * 3 + offset, SEEK_SET);
-					fwrite((void*) frameBuffer, 4 * 3, 1, file);
-				}
-			}
-		}
-	}
-}
-
-void test(unsigned short* srcPtr) {
-	char r, g, b;
-	char* fb = frameBuffer;
-	const int height = 160;
-	const int width = 240;
-	// const int offset = ((1024 - 960) / 2 * 768 + (768 - 640) / 2) * 3;
-	const int offset = ((768 - 640) / 2 * 1024 + (1024 - 960) / 2) * 3;
-	const int k = 4;
-	for (int i = 0; i < height; ++i) {
-		for (int j = 0; j < width; ++j) {
-			r = (srcPtr[i * width + j] >> 8) & 0xf8;
-			g = (srcPtr[i * width + j] >> 3) & 0xfc;
-			b = (srcPtr[i * width + j] << 3) & 0xf8;
-			for (int m = 0; m < k; ++m) {
-				for (int n = 0; n < k; ++n) {
-					fb[(j * k + m) * 3 + (i * k + n) * 3 * 1024 + offset] = b;
-					fb[(j * k + m) * 3 + (i * k + n) * 3 * 1024 + 1 + offset] = g;
-					fb[(j * k + m) * 3 + (i * k + n) * 3 * 1024 + 2 + offset] = r;
 				}
 			}
 		}
@@ -159,7 +141,7 @@ void _log(struct mLogger* log, int category, enum mLogLevel level, const char* f
 	}
 }
 
-void mgbaMainLoop(FILE* fd) {
+void mgbaMainLoop() {
 	struct mCoreOptions opts = {
 		.useBios = false,
 		.volume = 0x040,
@@ -183,27 +165,18 @@ void mgbaMainLoop(FILE* fd) {
 	int framecount = 0;
 	while (1) {
 		core->runFrame(core);
-		//++framecount;
-		// if (framecount == 3) {
-		// framecount = 0;
-		test((unsigned short*) videoBuffer);
-		if (fwrite((void*) frameBuffer, 1024 * 768 * 3, 1, fd) < 0) {
-			printf("mgba ERROR!!!");
-		}
-		//}
+		test1((unsigned short*) videoBuffer);
 	}
 }
 
 int main() {
-	videoBuffer = malloc(1024 * 768 * 3);
-	frameBuffer = malloc(1024 * 768 * 3);
+	videoBuffer = malloc(320 * 240 * 2);
+	Buffer = malloc(1024 * 768 * 3);
 	printf("hello world???\n");
-	putc(getc(stdin), stdout); // test keyboard, still don't know whether getc() is enough
 
-	FILE* fp = NULL;
-	fp = fopen("/dev/fb0", "r+");
-	/*plotMandelbrot(fp);*/
-	mgbaMainLoop(fp);
-	fclose(fp);
+	int fd = open("/dev/fb0", O_WRONLY);
+	frameBuffer = (char *)mmap((void *)0xf0000000, 1024 * 768 * 3, PROT_WRITE, MAP_SHARED, fd, 0);
+	close(fd);
+	mgbaMainLoop();
 	return 0;
 }
