@@ -141,6 +141,33 @@ void _log(struct mLogger* log, int category, enum mLogLevel level, const char* f
 	}
 }
 
+uint16_t translateKey(int ch) {
+	switch (ch) {
+		case 'w':
+			return 1 << 6;
+		case 's':
+			return 1 << 7;
+		case 'a':
+			return 1 << 5;
+		case 'd':
+			return 1 << 4;
+		case 'z':
+			return 1 << 0;
+		case 'x':
+			return 1 << 1;
+		case 'q':
+			return 1 << 9;
+		case 'e':
+			return 1 << 8;
+		case '1':
+			return 1 << 2;
+		case '2':
+			return 1 << 3;
+	}
+	printf("the ch %s is useless", (char)ch);
+	return 0;
+}
+
 void mgbaMainLoop() {
 	struct mCoreOptions opts = {
 		.useBios = false,
@@ -163,7 +190,15 @@ void mgbaMainLoop() {
 	core->reset(core);
 
 	int framecount = 0;
+	uint16_t keyState = 0;
+	char c;
 	while (1) {
+		while( read(STDIN_FILENO, (void *)&c, 1) > 0) {
+			printf("%d \n", (int)c);
+			keyState = translateKey((int)c);
+			core->setKeys(core, keyState);
+			keyState = 0;
+		}
 		core->runFrame(core);
 		test1((unsigned short*) videoBuffer);
 	}
@@ -177,6 +212,7 @@ int main() {
 	int fd = open("/dev/fb0", O_WRONLY);
 	frameBuffer = (char *)mmap((void *)0xf0000000, 1024 * 768 * 3, PROT_WRITE, MAP_SHARED, fd, 0);
 	close(fd);
+	fcntl(STDIN_FILENO, F_SETFL, O_NONBLOCK);
 	mgbaMainLoop();
 	return 0;
 }
