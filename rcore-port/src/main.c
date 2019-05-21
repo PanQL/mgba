@@ -142,6 +142,41 @@ void test(unsigned short* srcPtr) {
 	}
 }
 
+int multi_times = 0;
+
+void pre_test2(int h, int w) {
+	const int height = 160;
+	const int width = 240;
+	for (int i = 0; h > height && w > width) {
+		++multi_times;
+		h -= height;
+		w -= width;
+	}
+}
+
+void test2(unsigned short* srcPtr, int h, int w) {
+	char r, g, b;
+	char* fb = frameBuffer;
+	const int height = 160;
+	const int width = 240;
+	const int offset = ((h - height * multi_times) / 2 * w + (w - width * multi_times) / 2) * 3;
+	const int k = 4;
+	for (int i = 0; i < height; ++i) {
+		for (int j = 0; j < width; ++j) {
+			r = (srcPtr[i * width + j] >> 8) & 0xf8;
+			g = (srcPtr[i * width + j] >> 3) & 0xfc;
+			b = (srcPtr[i * width + j] << 3) & 0xf8;
+			for (int m = 0; m < k; ++m) {
+				for (int n = 0; n < k; ++n) {
+					fb[(j * k + m) * 3 + (i * k + n) * 3 * 1024 + offset] = b;
+					fb[(j * k + m) * 3 + (i * k + n) * 3 * 1024 + 1 + offset] = g;
+					fb[(j * k + m) * 3 + (i * k + n) * 3 * 1024 + 2 + offset] = r;
+				}
+			}
+		}
+	}
+}
+
 static int _logLevel = 0x0f;
 void _log(struct mLogger* log, int category, enum mLogLevel level, const char* format, va_list args) {
 	if (level & _logLevel) {
