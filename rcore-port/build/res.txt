@@ -1,1 +1,0 @@
-[ 50%] Building C object CMakeFiles/mgba.dir/src/main.c.o
