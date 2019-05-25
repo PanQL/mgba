@@ -15,19 +15,24 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <linux/fb.h>
 
 char* videoBuffer = NULL;
 char* frameBuffer = NULL;
 char* Buffer = NULL;
 
-int plotMandelbrot(FILE* fd) {
+int fb_width = 0;
+int fb_height = 0;
+int fb_depth = 0;
+
+int plotMandelbrot(int width, int height, int depth) {
 	float scale = 5e-3;
-	int width = 1024;
-	int heigth = 768;
+	char* buf = frameBuffer;
+
 	for (int x = 0; x < width; x++) {
-		for (int y = 0; y < heigth; y++) {
+		for (int y = 0; y < height; y++) {
 			float xx = ((float) x - width / 2) * scale;
-			float yy = ((float) y - heigth / 2) * scale;
+			float yy = ((float) y - height / 2) * scale;
 			float re = xx;
 			float im = yy;
 			int iter = 0;
@@ -53,43 +58,124 @@ int plotMandelbrot(FILE* fd) {
 			float t = 0.5 * (1.0 - (1.0 - f));
 			switch (hi) {
 			case 0:
-				videoBuffer[3 * (x * 768 + y)] = (char) 128;
-				videoBuffer[3 * (x * 768 + y) + 1] = (char) (256 * t);
-				videoBuffer[3 * (x * 768 + y) + 2] = (char) (256 * p);
+				if ( depth == 3) {
+					*buf = (char) 128;
+					buf++;
+					*buf = (char) (256 * t);
+					buf++;
+					*buf = (char) (256 * p);
+					buf++;
+				} else if ( depth == 2) {
+					*(uint16_t *)buf = (uint16_t)(((uint16_t)16 << 11)
+						| ((uint16_t)(32 * t) << 5)
+						| ((uint16_t)(32 * p)) );
+					buf += 2;
+				}
 				break;
 			case 1:
-				videoBuffer[3 * (x * 768 + y)] = (char) (256 * q);
-				videoBuffer[3 * (x * 768 + y) + 1] = (char) (256 * 0.5);
-				videoBuffer[3 * (x * 768 + y) + 2] = (char) (256 * p);
+				/*frameBuffer[3 * (x * height + y)] = (char) (256 * q);*/
+				/*frameBuffer[3 * (x * height + y) + 1] = (char) (256 * 0.5);*/
+				/*frameBuffer[3 * (x * height + y) + 2] = (char) (256 * p);*/
+				if ( depth == 3) {
+					*buf = (char) (256 * q);
+					buf++;
+					*buf = (char) (256 * 0.5);
+					buf++;
+					*buf = (char) (256 * p);
+					buf++;
+				} else if ( depth == 2) {
+					*(uint16_t*)buf = (uint16_t)(((uint16_t)(31 * q) << 11)
+						| ((uint16_t)(63 * 0.5) << 5)
+						| ((uint16_t)(31 * p)) );
+					buf += 2;
+				}
 				break;
 			case 2:
-				videoBuffer[3 * (x * 768 + y)] = (char) (256 * p);
-				videoBuffer[3 * (x * 768 + y) + 1] = (char) (256 * 0.5);
-				videoBuffer[3 * (x * 768 + y) + 2] = (char) (256 * t);
+				/*frameBuffer[3 * (x * height + y)] = (char) (256 * p);*/
+				/*frameBuffer[3 * (x * height + y) + 1] = (char) (256 * 0.5);*/
+				/*frameBuffer[3 * (x * height + y) + 2] = (char) (256 * t);*/
+				if ( depth == 3) {
+					*buf = (char) (256 * p);
+					buf++;
+					*buf = (char) (256 * 0.5);
+					buf++;
+					*buf = (char) (256 * t);
+					buf++;
+				} else if ( depth == 2) {
+					*(uint16_t*)buf = (uint16_t)(((uint16_t)(31 * p) << 11)
+						| ((uint16_t)(63 * 0.5) << 5)
+						| ((uint16_t)(31 * t)) );
+					buf += 2;
+				}
 				break;
 			case 3:
-				videoBuffer[3 * (x * 768 + y)] = (char) (256 * p);
-				videoBuffer[3 * (x * 768 + y) + 1] = (char) (256 * q);
-				videoBuffer[3 * (x * 768 + y) + 2] = (char) (256 * 0.5);
+				/*frameBuffer[3 * (x * height + y)] = (char) (256 * p);*/
+				/*frameBuffer[3 * (x * height + y) + 1] = (char) (256 * q);*/
+				/*frameBuffer[3 * (x * height + y) + 2] = (char) (256 * 0.5);*/
+				if ( depth == 3) {
+					*buf = (char) (256 * p);
+					buf++;
+					*buf = (char) (256 * q);
+					buf++;
+					*buf = (char) (256 * 0.5);
+					buf++;
+				} else if ( depth == 2) {
+					*(uint16_t*)buf = (uint16_t)(((uint16_t)(31 * p) << 11)
+						| ((uint16_t)(63 * q) << 5)
+						| ((uint16_t)(31 * 0.5)) );
+					buf += 2;
+				}
 				break;
 			case 4:
-				videoBuffer[3 * (x * 768 + y)] = (char) (256 * t);
-				videoBuffer[3 * (x * 768 + y) + 1] = (char) (256 * p);
-				videoBuffer[3 * (x * 768 + y) + 2] = (char) (256 * 0.5);
+				/*frameBuffer[3 * (x * height + y)] = (char) (256 * t);*/
+				/*frameBuffer[3 * (x * height + y) + 1] = (char) (256 * p);*/
+				/*frameBuffer[3 * (x * height + y) + 2] = (char) (256 * 0.5);*/
+				if ( depth == 3) {
+					*buf = (char) (256 * t);
+					buf++;
+					*buf = (char) (256 * p);
+					buf++;
+					*buf = (char) (256 * 0.5);
+					buf++;
+				} else if ( depth == 2) {
+					*(uint16_t*)buf = (uint16_t)(((uint16_t)(31 * t) << 11)
+						| ((uint16_t)(63 * p) << 5)
+						| ((uint16_t)(31 * 0.5)) );
+					buf += 2;
+				}
 				break;
 			case 5:
-				videoBuffer[3 * (x * 768 + y)] = (char) (256 * 0.5);
-				videoBuffer[3 * (x * 768 + y) + 1] = (char) (256 * p);
-				videoBuffer[3 * (x * 768 + y) + 2] = (char) (256 * q);
+				/*frameBuffer[3 * (x * height + y)] = (char) (256 * 0.5);*/
+				/*frameBuffer[3 * (x * height + y) + 1] = (char) (256 * p);*/
+				/*frameBuffer[3 * (x * height + y) + 2] = (char) (256 * q);*/
+				if ( depth == 3) {
+					*buf = (char) (256 * 0.5);
+					buf++;
+					*buf = (char) (256 * p);
+					buf++;
+					*buf = (char) (256 * q);
+					buf++;
+				} else if ( depth == 2) {
+					*(uint16_t*)buf = (uint16_t)(((uint16_t)(31 * 0.5) << 11)
+						| ((uint16_t)(63 * p) << 5)
+						| ((uint16_t)(31 * q)) );
+					buf += 2;
+				}
 				break;
 			}
 		}
 	}
-	if (fwrite((void*) videoBuffer, 1024 * 768 * 3, 1, fd) < 0) {
-		printf("mgba ERROR!!!");
-		return -1;
-	}
 	return 0;
+}
+
+void flash(int width, int height) {
+	for(int i = 0; i < width; i++ ) {
+		for(int j = 0; j < height; j++) {
+			frameBuffer[2 * (j + i * height)] = 0;
+			frameBuffer[2 * (j + i * height) + 1] = 31;
+			printf("here drawing %d %d \n", i, j);
+		}
+	}
 }
 
 void test1(unsigned short* srcPtr) {
@@ -128,7 +214,7 @@ int multi_times = 0;
 void pre_test2(int h, int w) {
 	const int height = 160;
 	const int width = 240;
-	for (int i = 0; h > height && w > width) {
+	for (int i = 0; h > height && w > width;) {
 		++multi_times;
 		h -= height;
 		w -= width;
@@ -138,16 +224,25 @@ void pre_test2(int h, int w) {
 // h, w 为目标屏幕的分辨率（rgb565）
 // 需要先执行 pre_test2(h, w) ，为 multi_times 初始化
 void test2(unsigned short* srcPtr, int h, int w) {
+	unsigned short* buffer = (unsigned short*) Buffer;
 	unsigned short* fb = (unsigned short*) frameBuffer;
 	const int height = 160;
 	const int width = 240;
 	const int offset = (h - height * multi_times) / 2 * w + (w - width * multi_times) / 2;
 	const int k = multi_times;
+	int idx0 = 0;
 	for (int i = 0; i < height; ++i) {
 		for (int j = 0; j < width; ++j) {
-			for (int m = 0; m < k; ++m) {
-				for (int n = 0; n < k; ++n) {
-					fb[(j * k + m) + (i * k + n) * 1024 + offset] = srcPtr[i * width + j];
+			idx0 = i * width + j;
+			if ( buffer[idx0] != srcPtr[idx0] ) {
+				buffer[idx0] = srcPtr[idx0];
+				for (int m = 0; m < k; ++m) {
+					for (int n = 0; n < k; ++n) {
+						fb[(j * k + m) + (i * k + n) * w + offset] = buffer[idx0];
+						/*if ( videoBuffer[(j * k + m) + (i * k + n) * w + offset] != srcPtr[i * width + j] ) {*/
+							/*videoBuffer[(j * k + m) + (i * k + n) * w + offset] = srcPtr[i * width + j];*/
+						/*}*/
+					}
 				}
 			}
 		}
@@ -222,27 +317,46 @@ void mgbaMainLoop() {
 	int framecount = 0;
 	uint16_t keyState = 0;
 	char c;
+	pre_test2(fb_height, fb_width);
 	while (1) {
-		while (read(STDIN_FILENO, (void*) &c, 1) > 0) {
-			printf("%d \n", (int) c);
-			keyState = translateKey((int) c);
-			core->setKeys(core, keyState);
-			keyState = 0;
-		}
+		/*while (read(STDIN_FILENO, (void*) &c, 1) > 0) {*/
+			/*printf("%d \n", (int) c);*/
+			/*keyState = translateKey((int) c);*/
+			/*core->setKeys(core, keyState);*/
+			/*keyState = 0;*/
+		/*}*/
 		core->runFrame(core);
-		test1((unsigned short*) videoBuffer);
+		/*test1((unsigned short*) videoBuffer);*/
+		test2((unsigned short*) videoBuffer, fb_height, fb_width);
 	}
 }
 
 int main() {
+	struct fb_var_screeninfo vinfo;
+	int fbfd = open("/dev/fb0", O_WRONLY);
+	if (!fbfd) {
+        printf("Error: cannot open framebuffer device.\n");
+        exit(1);
+	}
+
+    if (ioctl(fbfd, FBIOGET_VSCREENINFO, &vinfo)) {
+        printf("Error reading variable information.\n");
+        exit(3);
+    }
+
+	fb_depth = vinfo.bits_per_pixel;
+	fb_width = vinfo.xres;
+	fb_height = vinfo.yres;
+
 	videoBuffer = malloc(320 * 240 * 2);
-	Buffer = malloc(1024 * 768 * 3);
+	Buffer = malloc(320 * 240 * 2);
 	printf("hello world???\n");
 
-	int fd = open("/dev/fb0", O_WRONLY);
-	frameBuffer = (char*) mmap((void*) 0xf0000000, 1024 * 768 * 3, PROT_WRITE, MAP_SHARED, fd, 0);
-	close(fd);
+	frameBuffer = (char*) mmap((void*) 0xf0000000, fb_width * fb_height * fb_depth / 8, PROT_WRITE, MAP_SHARED, fbfd, 0);
+	close(fbfd);
 	fcntl(STDIN_FILENO, F_SETFL, O_NONBLOCK);
 	mgbaMainLoop();
+	/*plotMandelbrot(fb_height,fb_width,  fb_depth / 8);*/
+	/*flash(fb_width, fb_height);*/
 	return 0;
 }
