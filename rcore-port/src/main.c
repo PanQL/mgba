@@ -206,7 +206,7 @@ void test1_qemu(unsigned short* srcPtr) {
 void pre_test1() { // 把屏幕初始化为白色，以后就无需再管灰度了
 	unsigned long long* fb = (unsigned long long*) frameBuffer;
 	for (int i = 0; i < 1024 * 768 * 32 / 64; ++i)
-		fb[i] = unsigned long long(0) - unsigned long long(1);
+		fb[i] = (unsigned long long)(0) - (unsigned long long)(1);
 }
 
 void test1(unsigned short* srcPtr) { // for real machine
@@ -348,17 +348,20 @@ void mgbaMainLoop() {
 	int framecount = 0;
 	uint16_t keyState = 0;
 	char c;
-	pre_test2(fb_height, fb_width);
+	/*pre_test2(fb_height, fb_width);*/
 	while (1) {
-		/*while (read(STDIN_FILENO, (void*) &c, 1) > 0) {*/
-		/*printf("%d \n", (int) c);*/
-		/*keyState = translateKey((int) c);*/
-		/*core->setKeys(core, keyState);*/
-		/*keyState = 0;*/
-		/*}*/
+		if (read(STDIN_FILENO, (void*) &c, 1) > 0) {
+			/*printf("%d \n", (int) c);*/
+			keyState = translateKey((int) c);
+			core->setKeys(core, keyState);
+			keyState = 0;
+		}else{
+			core->setKeys(core, 0);
+		}
 		core->runFrame(core);
 		/*test1((unsigned short*) videoBuffer);*/
-		test2((unsigned short*) videoBuffer, fb_height, fb_width);
+		/*test2((unsigned short*) videoBuffer, fb_height, fb_width);*/
+		test1_qemu((unsigned short*) videoBuffer);
 	}
 }
 
@@ -380,7 +383,8 @@ int main() {
 	fb_height = vinfo.yres;
 
 	videoBuffer = malloc(320 * 240 * 2);
-	Buffer = malloc(320 * 240 * 2);
+	/*Buffer = malloc(320 * 240 * 2);*/
+	Buffer = malloc(fb_width * fb_height * fb_depth / 8);
 	printf("hello world???\n");
 
 	frameBuffer =
