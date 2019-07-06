@@ -1,0 +1,198 @@
+<7>[    0.157133] pci 0000:00:04.0: reg 0x14: [mem 0xf0400000-0xf07fffff]
+<7>[    0.157754] pci 0000:00:04.0: reg 0x18: [mem 0xf0800000-0xf0803fff pref]
+<7>[    0.160279] pci 0000:00:05.0: [8086:2415] type 00 class 0x040100
+<7>[    0.160379] pci 0000:00:05.0: reg 0x10: [io  0xd100-0xd1ff]
+<7>[    0.160429] pci 0000:00:05.0: reg 0x14: [io  0xd200-0xd23f]
+<7>[    0.160847] pci 0000:00:06.0: [106b:003f] type 00 class 0x0c0310
+<7>[    0.162002] pci 0000:00:06.0: reg 0x10: [mem 0xf0804000-0xf0804fff]
+<7>[    0.165725] pci 0000:00:07.0: [8086:7113] type 00 class 0x068000
+<6>[    0.166112] pci 0000:00:07.0: quirk: [io  0x4000-0x403f] claimed by PIIX4 ACPI
+<6>[    0.166119] pci 0000:00:07.0: quirk: [io  0x4100-0x410f] claimed by PIIX4 SMB
+<6>[    0.167050] ACPI: PCI Interrupt Link [LNKA] (IRQs 5 9 10 *11)
+<6>[    0.167203] ACPI: PCI Interrupt Link [LNKB] (IRQs 5 9 10 *11)
+<6>[    0.167263] ACPI: PCI Interrupt Link [LNKC] (IRQs 5 9 *10 11)
+<6>[    0.167321] ACPI: PCI Interrupt Link [LNKD] (IRQs 5 *9 10 11)
+<6>[    0.167561] pci 0000:00:02.0: vgaarb: setting as boot VGA device
+<6>[    0.167563] pci 0000:00:02.0: vgaarb: VGA device added: decodes=io+mem,owns=io+mem,locks=none
+<6>[    0.167565] pci 0000:00:02.0: vgaarb: bridge control possible
+<6>[    0.167565] vgaarb: loaded
+<6>[    0.167723] pps_core: LinuxPPS API ver. 1 registered
+<6>[    0.167723] pps_core: Software ver. 5.3.6 - Copyright 2005-2007 Rodolfo Giometti <giometti@linux.it>
+<6>[    0.167734] PTP clock support registered
+<6>[    0.168005] PCI: Using ACPI for IRQ routing
+<7>[    0.168006] PCI: pci_cache_line_size set to 64 bytes
+<7>[    0.168648] e820: reserve RAM buffer [mem 0x0009fc00-0x0009ffff]
+<7>[    0.168652] e820: reserve RAM buffer [mem 0x7fff0000-0x7fffffff]
+<6>[    0.168883] clocksource: Switched to clocksource kvm-clock
+<5>[    0.173501] VFS: Disk quotas dquot_6.6.0
+<6>[    0.173511] VFS: Dquot-cache hash table entries: 512 (order 0, 4096 bytes)
+<6>[    0.173544] pnp: PnP ACPI init
+<7>[    0.173608] pnp 00:00: Plug and Play ACPI device, IDs PNP0303 (active)
+<7>[    0.173715] pnp 00:01: Plug and Play ACPI device, IDs PNP0f03 (active)
+<6>[    0.174148] pnp: PnP ACPI: found 2 devices
+<6>[    0.180348] clocksource: acpi_pm: mask: 0xffffff max_cycles: 0xffffff, max_idle_ns: 2085701024 ns
+<7>[    0.180883] pci_bus 0000:00: resource 4 [io  0x0000-0x0cf7 window]
+<7>[    0.180884] pci_bus 0000:00: resource 5 [io  0x0d00-0xffff window]
+<7>[    0.180886] pci_bus 0000:00: resource 6 [mem 0x000a0000-0x000bffff window]
+<7>[    0.180887] pci_bus 0000:00: resource 7 [mem 0x80000000-0xffdfffff window]
+<6>[    0.180926] NET: Registered protocol family 2
+<6>[    0.181048] tcp_listen_portaddr_hash hash table entries: 1024 (order: 2, 16384 bytes)
+<6>[    0.181055] TCP established hash table entries: 16384 (order: 5, 131072 bytes)
+<6>[    0.181073] TCP bind hash table entries: 16384 (order: 6, 262144 bytes)
+<6>[    0.181090] TCP: Hash tables configured (established 16384 bind 16384)
+<6>[    0.181113] UDP hash table entries: 1024 (order: 3, 32768 bytes)
+<6>[    0.181117] UDP-Lite hash table entries: 1024 (order: 3, 32768 bytes)
+<6>[    0.181144] NET: Registered protocol family 1
+<6>[    0.181167] pci 0000:00:00.0: Limiting direct PCI/PCI transfers
+<6>[    0.181177] pci 0000:00:01.0: Activating ISA DMA hang workarounds
+<6>[    0.181214] pci 0000:00:02.0: Video device with shadowed ROM at [mem 0x000c0000-0x000dffff]
+<7>[    0.182224] PCI: CLS 0 bytes, default 64
+<6>[    0.182250] Trying to unpack rootfs image as initramfs...
+<6>[    0.329135] Freeing initrd memory: 10788K
+<6>[    0.329135] clocksource: tsc: mask: 0xffffffffffffffff max_cycles: 0x19f228ab7a2, max_idle_ns: 440795289252 ns
+<6>[    0.329135] platform rtc_cmos: registered platform RTC device (no PNP device found)
+<5>[    0.330444] Initialise system trusted keyrings
+<6>[    0.330568] workingset: timestamp_bits=40 max_order=19 bucket_order=0
+<6>[    0.332528] pstore: using deflate compression
+<5>[    0.333253] Key type asymmetric registered
+<5>[    0.333253] Asymmetric key parser 'x509' registered
+<6>[    0.333253] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 245)
+<6>[    0.333253] io scheduler noop registered
+<6>[    0.333253] io scheduler cfq registered (default)
+<6>[    0.333253] io scheduler mq-deadline registered
+<6>[    0.333253] io scheduler kyber registered
+<6>[    0.333253] shpchp: Standard Hot Plug PCI Controller Driver version: 0.4
+<6>[    0.333253] ERST DBG: ERST support is disabled.
+<6>[    0.333253] Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+<6>[    0.333253] brd: module loaded
+<6>[    0.333253] i8042: PNP: PS/2 Controller [PNP0303:PS2K,PNP0f03:PS2M] at 0x60,0x64 irq 1,12
+<6>[    0.333253] serio: i8042 KBD port at 0x60,0x64 irq 1
+<6>[    0.333253] serio: i8042 AUX port at 0x60,0x64 irq 12
+<6>[    0.335985] input: AT Translated Set 2 keyboard as /devices/platform/i8042/serio0/input/input0
+<6>[    0.336457] rtc_cmos rtc_cmos: registered as rtc0
+<6>[    0.336480] rtc_cmos rtc_cmos: alarms up to one day, 114 bytes nvram
+<6>[    0.336549] intel_pmc_core:  initialized
+<6>[    0.336618] gre: GRE over IPv4 demultiplexor driver
+<5>[    0.336623] Key type dns_resolver registered
+<6>[    0.336665] sched_clock: Marking stable (325720140, 9946140)->(441405278, -105738998)
+<6>[    0.336782] registered taskstats version 1
+<5>[    0.336782] Loading compiled-in X.509 certificates
+<6>[    0.337002] rtc_cmos rtc_cmos: setting system clock to 2019-06-10 01:04:15 UTC (1560128655)
+<6>[    0.338024] Freeing unused kernel image memory: 1492K
+<6>[    0.342363] Write protecting the kernel read-only data: 14336k
+<6>[    0.342811] Freeing unused kernel image memory: 2016K
+<6>[    0.343123] Freeing unused kernel image memory: 1824K
+<6>[    0.343158] Run /init as init process
+<5>[    0.355086] SCSI subsystem initialized
+<6>[    0.359389] ACPI: bus type USB registered
+<6>[    0.359423] usbcore: registered new interface driver usbfs
+<6>[    0.359438] usbcore: registered new interface driver hub
+<6>[    0.359451] usbcore: registered new device driver usb
+<6>[    0.360234] usbcore: registered new interface driver usb-storage
+<6>[    0.374147] loop: module loaded
+<7>[    0.393245] libata version 3.00 loaded.
+<7>[    0.393554] ata_piix 0000:00:01.1: version 2.13
+<6>[    0.394856] scsi host0: ata_piix
+<6>[    0.394981] scsi host1: ata_piix
+<6>[    0.395010] ata1: PATA max UDMA/33 cmd 0x1f0 ctl 0x3f6 bmdma 0xd000 irq 14
+<6>[    0.395011] ata2: PATA max UDMA/33 cmd 0x170 ctl 0x376 bmdma 0xd008 irq 15
+<6>[    0.553186] ata1.00: ATA-6: VBOX HARDDISK, 1.0, max UDMA/133
+<6>[    0.553193] ata1.00: 16777216 sectors, multi 128: LBA 
+<6>[    0.553204] ata1.01: ATAPI: VBOX CD-ROM, 1.0, max UDMA/133
+<5>[    0.555423] scsi 0:0:0:0: Direct-Access     ATA      VBOX HARDDISK    1.0  PQ: 0 ANSI: 5
+<5>[    0.556784] scsi 0:0:1:0: CD-ROM            VBOX     CD-ROM           1.0  PQ: 0 ANSI: 5
+<5>[    0.557719] sd 0:0:0:0: [sda] 16777216 512-byte logical blocks: (8.59 GB/8.00 GiB)
+<5>[    0.557739] sd 0:0:0:0: [sda] Write Protect is off
+<7>[    0.557743] sd 0:0:0:0: [sda] Mode Sense: 00 3a 00 00
+<5>[    0.557772] sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+<6>[    0.558577]  sda: sda1 sda2 sda3
+<5>[    0.559326] sd 0:0:0:0: [sda] Attached SCSI disk
+<6>[    0.563086] ohci_hcd: USB 1.1 'Open' Host Controller (OHCI) Driver
+<6>[    0.565405] ehci_hcd: USB 2.0 'Enhanced' Host Controller (EHCI) Driver
+<4>[    0.565407] Warning! ehci_hcd should always be loaded before uhci_hcd and ohci_hcd, not after
+<6>[    0.565902] ehci-pci: EHCI PCI platform driver
+<6>[    0.572077] ohci-pci: OHCI PCI platform driver
+<6>[    0.573736] ohci-pci 0000:00:06.0: OHCI PCI host controller
+<6>[    0.573753] ohci-pci 0000:00:06.0: new USB bus registered, assigned bus number 1
+<6>[    0.573967] ohci-pci 0000:00:06.0: irq 22, io mem 0xf0804000
+<6>[    0.630892] usb usb1: New USB device found, idVendor=1d6b, idProduct=0001, bcdDevice= 4.19
+<6>[    0.630901] usb usb1: New USB device strings: Mfr=3, Product=2, SerialNumber=1
+<6>[    0.630907] usb usb1: Product: OHCI PCI host controller
+<6>[    0.630912] usb usb1: Manufacturer: Linux 4.19.37-1-vanilla ohci_hcd
+<6>[    0.630916] usb usb1: SerialNumber: 0000:00:06.0
+<6>[    0.631500] hub 1-0:1.0: USB hub found
+<6>[    0.631569] hub 1-0:1.0: 12 ports detected
+<6>[    0.665866] sr 0:0:1:0: [sr0] scsi3-mmc drive: 32x/32x xa/form2 tray
+<6>[    0.665868] cdrom: Uniform CD-ROM driver Revision: 3.20
+<7>[    0.666128] sr 0:0:1:0: Attached scsi CD-ROM sr0
+<6>[    1.062163] usb 1-1: new full-speed USB device number 2 using ohci-pci
+<6>[    1.344879] usb 1-1: New USB device found, idVendor=80ee, idProduct=0021, bcdDevice= 1.00
+<6>[    1.344886] usb 1-1: New USB device strings: Mfr=1, Product=3, SerialNumber=0
+<6>[    1.344890] usb 1-1: Product: USB Tablet
+<6>[    1.344894] usb 1-1: Manufacturer: VirtualBox
+<6>[    1.414430] hidraw: raw HID events driver (C) Jiri Kosina
+<6>[    1.427571] usbcore: registered new interface driver usbhid
+<6>[    1.427572] usbhid: USB HID core driver
+<6>[    1.428203] input: VirtualBox USB Tablet as /devices/pci0000:00/0000:00:06.0/usb1/1-1/1-1:1.0/0003:80EE:0021.0001/input/input3
+<6>[    1.428396] hid-generic 0003:80EE:0021.0001: input,hidraw0: USB HID v1.10 Mouse [VirtualBox USB Tablet] on usb-0000:00:06.0-1/input0
+<6>[    1.558194] EXT4-fs (sda3): mounted filesystem with ordered data mode. Opts: (null)
+<6>[    2.022421] ACPI: AC Adapter [AC] (on-line)
+<6>[    2.026599] input: Power Button as /devices/LNXSYSTM:00/LNXPWRBN:00/input/input4
+<6>[    2.026609] ACPI: Power Button [PWRF]
+<6>[    2.026703] input: Sleep Button as /devices/LNXSYSTM:00/LNXSLPBN:00/input/input5
+<6>[    2.026709] ACPI: Sleep Button [SLPF]
+<6>[    2.038239] ACPI: Video Device [GFX0] (multi-head: yes  rom: no  post: no)
+<6>[    2.038300] input: Video Bus as /devices/LNXSYSTM:00/LNXSYBUS:00/PNP0A03:00/LNXVIDEO:00/input/input6
+<6>[    2.049019] battery: ACPI: Battery Slot [BAT0] (battery present)
+<6>[    2.053495] RAPL PMU: API unit is 2^-32 Joules, 5 fixed counters, 10737418240 ms ovfl timer
+<6>[    2.053495] RAPL PMU: hw unit of domain pp0-core 2^-0 Joules
+<6>[    2.053496] RAPL PMU: hw unit of domain package 2^-0 Joules
+<6>[    2.053496] RAPL PMU: hw unit of domain dram 2^-0 Joules
+<6>[    2.053497] RAPL PMU: hw unit of domain pp1-gpu 2^-0 Joules
+<6>[    2.053497] RAPL PMU: hw unit of domain psys 2^-0 Joules
+<6>[    2.068105] cryptd: max_cpu_qlen set to 1000
+<6>[    2.077039] AVX version of gcm_enc/dec engaged.
+<6>[    2.077040] AES CTR mode by8 optimization enabled
+<6>[    2.087647] mousedev: PS/2 mouse device common for all mice
+<6>[    2.094720] e1000: Intel(R) PRO/1000 Network Driver - version 7.3.21-k8-NAPI
+<6>[    2.094721] e1000: Copyright (c) 1999-2006 Intel Corporation.
+<6>[    2.440791] e1000 0000:00:03.0 eth0: (PCI:33MHz:32-bit) 08:00:27:ed:8f:12
+<6>[    2.440795] e1000 0000:00:03.0 eth0: Intel(R) PRO/1000 Network Connection
+<6>[    2.446207] Linux agpgart interface v0.103
+<6>[    2.865480] snd_intel8x0 0000:00:05.0: intel8x0_measure_ac97_clock: measured 56339 usecs (15771 samples)
+<6>[    2.865486] snd_intel8x0 0000:00:05.0: measured clock 279930 rejected
+<6>[    3.238995] snd_intel8x0 0000:00:05.0: intel8x0_measure_ac97_clock: measured 54897 usecs (15754 samples)
+<6>[    3.239001] snd_intel8x0 0000:00:05.0: measured clock 286973 rejected
+<6>[    3.612289] snd_intel8x0 0000:00:05.0: intel8x0_measure_ac97_clock: measured 55459 usecs (15780 samples)
+<6>[    3.612295] snd_intel8x0 0000:00:05.0: measured clock 284534 rejected
+<6>[    3.612299] snd_intel8x0 0000:00:05.0: clocking to 48000
+<6>[    3.648833] piix4_smbus 0000:00:07.0: SMBus Host Controller at 0x4100, revision 0
+<4>[    3.693842] vboxvideo: loading out-of-tree module taints kernel.
+<4>[    3.708466] vgdrvHeartbeatInit: Setting up heartbeat to trigger every 2000 milliseconds
+<6>[    3.708588] input: Unspecified device as /devices/pci0000:00/0000:00:04.0/input/input7
+<4>[    3.713042] vboxguest: misc device minor 58, IRQ 20, I/O port d020, MMIO at 00000000f0400000 (size 0x400000)
+<7>[    3.713043] vboxguest: Successfully loaded version 6.0.4 (interface 0x00010004)
+<6>[    3.713865] input: PC Speaker as /devices/platform/pcspkr/input/input8
+<6>[    3.841749] NET: Registered protocol family 17
+<6>[    3.853701] NET: Registered protocol family 10
+<6>[    3.857765] Segment Routing with IPv6
+<6>[    3.919835] input: ImExPS/2 Generic Explorer Mouse as /devices/platform/i8042/serio1/input/input9
+<6>[    4.056365] EXT4-fs (sda3): re-mounted. Opts: (null)
+<6>[    4.177192] Adding 2097148k swap on /dev/sda2.  Priority:-2 extents:1 across:2097148k 
+<6>[    4.310661] EXT4-fs (sda1): mounted filesystem with ordered data mode. Opts: (null)
+<6>[    4.461002] IPv6: ADDRCONF(NETDEV_UP): eth0: link is not ready
+<6>[    4.465802] e1000: eth0 NIC Link is Up 1000 Mbps Full Duplex, Flow Control: RX
+<6>[    4.466100] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
+<7>[    7.679689] vboxsf: Successfully loaded version 6.0.4 (interface 0x00010004)
+<4>[    7.689525] 01:04:21.803812 main     VBoxService 6.0.4 r128164 (verbosity: 0) linux.amd64 (Apr  3 2019 14:11:02) release log
+<4>[    7.689525] 01:04:21.803816 main     Log opened 2019-06-10T01:04:21.803608000Z
+<4>[    7.689550] 01:04:21.803876 main     OS Product: Linux
+<4>[    7.689581] 01:04:21.803897 main     OS Release: 4.19.37-1-vanilla
+<4>[    7.689599] 01:04:21.803927 main     OS Version: #2-Alpine SMP Tue Apr 30 11:09:02 UTC 2019
+<4>[    7.689623] 01:04:21.803945 main     Executable: /usr/sbin/VBoxService
+<4>[    7.689623] 01:04:21.803946 main     Process ID: 2154
+<4>[    7.689623] 01:04:21.803947 main     Package type: LINUX_64BITS_GENERIC (OSE)
+<4>[    7.708003] 01:04:21.822294 main     6.0.4 r128164 started. Verbose level = 0
+<4>[    7.708542] 01:04:21.822855 main     vbglR3GuestCtrlDetectPeekGetCancelSupport: Not supported (#3)
+<4>[    7.711273] 01:04:21.825583 automount vbsvcAutoMountWorker: Shared folder 'mgba' was mounted to '/media/sf_mgba'
+<4>[   72.055909] ICMPv6: process `cp' is using deprecated sysctl (syscall) net.ipv6.neigh.default.base_reachable_time - use net.ipv6.neigh.default.base_reachable_time_ms instead

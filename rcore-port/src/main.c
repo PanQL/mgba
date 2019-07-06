@@ -56,6 +56,7 @@ int plotMandelbrot(int width, int height, int depth) {
 			float p = 0.0;
 			float q = 0.5 * (1.0 - f);
 			float t = 0.5 * (1.0 - (1.0 - f));
+			// printf("here");
 			switch (hi) {
 			case 0:
 				if (depth == 3) {
@@ -348,20 +349,14 @@ void mgbaMainLoop() {
 	int framecount = 0;
 	uint16_t keyState = 0;
 	char c;
-	/*pre_test2(fb_height, fb_width);*/
+	int counter = 10;
 	while (1) {
-		if (read(STDIN_FILENO, (void*) &c, 1) > 0) {
-			/*printf("%d \n", (int) c);*/
-			keyState = translateKey((int) c);
-			core->setKeys(core, keyState);
-			keyState = 0;
-		}else{
-			core->setKeys(core, 0);
+		while (read(STDIN_FILENO, (void*) &c, 1) > 0) {
+			keyState |= translateKey(c);
 		}
+		core->setKeys(core, keyState);
 		core->runFrame(core);
-		/*test1((unsigned short*) videoBuffer);*/
-		/*test2((unsigned short*) videoBuffer, fb_height, fb_width);*/
-		test1_qemu((unsigned short*) videoBuffer);
+		test1_qemu(videoBuffer);
 	}
 }
 
@@ -383,16 +378,18 @@ int main() {
 	fb_height = vinfo.yres;
 
 	videoBuffer = malloc(320 * 240 * 2);
-	/*Buffer = malloc(320 * 240 * 2);*/
 	Buffer = malloc(fb_width * fb_height * fb_depth / 8);
 	printf("hello world???\n");
+	printf("%d, %d, %d", fb_width, fb_height, fb_depth);
 
 	frameBuffer =
-	    (char*) mmap((void*) 0xf0000000, fb_width * fb_height * fb_depth / 8, PROT_WRITE, MAP_SHARED, fbfd, 0);
+	    (char*) mmap((void*) 0xfd000000, fb_width * fb_height * fb_depth / 8, PROT_WRITE, MAP_SHARED, fbfd, 0);
 	close(fbfd);
+	// for(int i = 0; i < 1024 * 768 * 3; i ++){
+	// 	frameBuffer[i] = 255;
+	// }
+	// plotMandelbrot(fb_width, fb_height, fb_depth / 8);
 	fcntl(STDIN_FILENO, F_SETFL, O_NONBLOCK);
 	mgbaMainLoop();
-	/*plotMandelbrot(fb_height,fb_width,  fb_depth / 8);*/
-	/*flash(fb_width, fb_height);*/
 	return 0;
 }
